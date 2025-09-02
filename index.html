@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLOTHY</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Google Fonts - Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #20B2AA;
+            /* Light Sea Green / Turquoise */
+            --secondary-color: #E0F2F1;
+            /* Light Turquoise */
+            --text-color: #333;
+            --kanit-font: 'Kanit', sans-serif;
+            --card-bg-color: #FFFFFF;
+        }
+
+        body {
+            font-family: var(--kanit-font);
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .navbar-custom {
+            background-color: var(--primary-color);
+        }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: var(--secondary-color);
+        }
+
+        .btn-custom {
+            background-color: var(--primary-color);
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #25C5B5;
+            /* Lighter Turquoise */
+            color: #FFFFFF;
+        }
+        
+        .history-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid #dee2e6;
+            border-radius: 0.75rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .history-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-choice-card {
+            background-color: var(--card-bg-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+             border: 1px solid #dee2e6;
+        }
+
+        .main-choice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .enhancement-btn {
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .enhancement-btn:hover {
+           transform: translateY(-3px);
+           box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Loading spinner */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--secondary-color);
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">CLOTHY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logout-btn">ออกจากระบบ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+
+        <!-- Loading Spinner -->
+        <div id="loader">
+            <img src="https://storage.googleapis.com/maker-studio-app-assets/D9CB74F4-0579-4614-BAE6-1E88939CB769.jpg" alt="Clothy Logo" style="max-height: 150px; margin-bottom: 1rem;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">กำลังเตรียมข้อมูลให้คุณ...</p>
+        </div>
+
+        <!-- App Section (Hidden until authenticated and profile is set) -->
+        <div id="app-section" class="d-none">
+            
+            <!-- Main Menu View -->
+            <div id="main-menu-view">
+                <div class="text-center mb-5">
+                     <img src="https://storage.googleapis.com/maker-studio-app-assets/D9CB74F4-0579-4614-BAE6-1E88939CB769.jpg" 
+                        alt="Clothy Logo" class="img-fluid rounded-3 mb-4" style="max-height: 250px;" loading="lazy" decoding="async">
+                    <h1 class="display-5 fw-bold">CLOTHY</h1>
+                    <p class="lead" id="welcome-message">MAKE YOUR LUCK!</p>
+                </div>
+                
+                <div class="row g-4 justify-content-center mb-5 text-center">
+                     <div class="col-md-5">
+                        <div class="main-choice-card" data-option="occasion">
+                            <h4 class="fw-bold">โอกาสในการแต่งตัว</h4>
+                            <p class="text-muted">เลือกเสื้อผ้าให้เหมาะกับสถานการณ์ต่างๆ</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="main-choice-card" data-option="personal-color">
+                            <h4 class="fw-bold">ผิวที่ใช่ กับโทนที่ชอบ</h4>
+                            <p class="text-muted" id="personal-color-desc">ค้นหา Personal Color ของคุณ</p>
+                        </div>
+                    </div>
+                     <div class="col-md-5">
+                        <div class="main-choice-card" data-option="style">
+                            <h4 class="fw-bold">เหมียวไหนคือคุณ?</h4>
+                            <p class="text-muted">ค้นหาสไตล์ที่เป็นตัวคุณ</p>
+                        </div>
+                    </div>
+                     <div class="col-md-5">
+                        <div class="main-choice-card" data-option="quote">
+                            <h4 class="fw-bold">คำคมประจำวัน</h4>
+                            <p class="text-muted">“ถึงนิสัยเราจะดีไม่ได้ แต่เราสามารถเปลี่ยนการแต่งตัวให้ดีได้”</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Color View -->
+            <div id="daily-color-view" class="d-none">
+                <div class="d-flex align-items-center mb-4">
+                    <button class="btn btn-light me-3" id="back-to-menu-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/></svg>
+                    </button>
+                    <h2 class="mb-0 fw-bold">เลือกสีมงคล</h2>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card shadow-sm border-0" style="border-radius: 1rem;">
+                            <div class="card-body p-4 p-md-5">
+                                <div class="mb-3">
+                                    <label for="date-picker" class="form-label">เลือกวันที่:</label>
+                                    <input type="date" id="date-picker" class="form-control">
+                                </div>
+                                <p class="form-label">เลือกสิ่งที่ต้องการเสริมดวง:</p>
+                                <div class="d-flex flex-wrap justify-content-center gap-2">
+                                    <button class="btn btn-outline-primary enhancement-btn" data-enhancement="การเงิน">💰 การเงิน</button>
+                                    <button class="btn btn-outline-success enhancement-btn" data-enhancement="การงาน">👔 การงาน</button>
+                                    <button class="btn btn-outline-danger enhancement-btn" data-enhancement="ความรัก">❤️ ความรัก</button>
+                                    <button class="btn btn-outline-info enhancement-btn" data-enhancement="สุขภาพ">💪 สุขภาพ</button>
+                                    <button class="btn btn-outline-warning enhancement-btn" data-enhancement="โชคลาภ">✨ โชคลาภ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-12">
+                         <h3 class="mb-4 text-center">ประวัติสีมงคลของคุณ</h3>
+                        <div id="history-cards-container" class="row g-4"></div>
+                        <div id="no-data-message" class="text-center text-muted p-4 d-none">
+                            <h5>ยังไม่มีข้อมูลสีมงคล</h5>
+                            <p>เลือกวันที่และสิ่งที่ต้องการเสริมดวงเพื่อเริ่มบันทึก</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="profileSetupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="profileSetupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title" id="profileSetupModalLabel">ข้อมูลเพิ่มเติม</h5></div>
+                <div class="modal-body">
+                    <p>กรุณากรอกข้อมูลเพื่อให้เราแนะนำสีที่เหมาะกับคุณได้ดียิ่งขึ้น</p>
+                    <form id="profile-form">
+                        <div class="mb-3">
+                            <label for="gender-select" class="form-label">เพศ</label>
+                            <select id="gender-select" class="form-select" required><option value="" disabled selected>-- เลือกเพศ --</option><option value="male">ชาย</option><option value="female">หญิง</option><option value="other">อื่นๆ</option></select>
+                        </div>
+                        <div class="mb-3">
+                             <label for="dob-input" class="form-label">วันเดือนปีเกิด</label>
+                             <input type="date" id="dob-input" class="form-control" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-primary" id="save-profile-btn">บันทึกข้อมูล</button></div>
+            </div>
+        </div>
+    </div>
+    <!-- Other Modals: Message, Confirmation, Quizzes -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="messageModalLabel">การแจ้งเตือน</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body" id="modal-body-text" style="white-space: pre-wrap;"></div><div class="modal-footer"><button type="button" class="btn btn-custom" data-bs-dismiss="modal">ตกลง</button></div></div></div></div>
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="confirmationModalLabel">ยืนยันการลบ</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><p>คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button><button type="button" class="btn btn-danger" id="confirm-delete-btn">ลบ</button></div></div></div></div>
+    <div class="modal fade" id="personalColorModal" tabindex="-1" aria-labelledby="personalColorModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="personalColorModalLabel">Personal Color ของคุณคือ?</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div id="quiz-step-1"><p class="fw-bold">1/3: ลองดูเส้นเลือดที่ข้อมือของคุณ มีสีโทนไหนเด่นกว่ากัน?</p><div class="d-grid gap-2"><button class="btn btn-outline-success personal-color-quiz-btn" data-value="warm">โทนสีเขียว</button><button class="btn btn-outline-primary personal-color-quiz-btn" data-value="cool">โทนสีน้ำเงิน/ม่วง</button><button class="btn btn-outline-secondary personal-color-quiz-btn" data-value="neutral">ไม่แน่ใจ/มีทั้งสองสี</button></div></div><div id="quiz-step-2" class="d-none"><p class="fw-bold">2/3: เมื่อโดนแดด ผิวของคุณเป็นอย่างไร?</p><div class="d-grid gap-2"><button class="btn btn-outline-warning personal-color-quiz-btn" data-value="warm">ผิวคล้ำขึ้น/แทนง่าย</button><button class="btn btn-outline-danger personal-color-quiz-btn" data-value="cool">ผิวแดง/ไหม้ก่อนแล้วค่อยคล้ำ</button></div></div><div id="quiz-step-3" class="d-none"><p class="fw-bold">3/3: คุณคิดว่าเครื่องประดับสีไหนเหมาะกับคุณมากกว่า?</p><div class="d-grid gap-2"><button class="btn btn-outline-warning personal-color-quiz-btn" data-value="warm">สีทอง (Gold)</button><button class="btn btn-outline-info personal-color-quiz-btn" data-value="cool">สีเงิน (Silver)</button></div></div></div></div></div></div>
+    <div class="modal fade" id="styleQuizModal" tabindex="-1" aria-labelledby="styleQuizModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="styleQuizModalLabel">เหมียวไหนคือคุณ?</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><div id="style-quiz-step-1"><p class="fw-bold">1/3: ถ้ามีวันหยุด 1 วัน คุณอยากจะไปทำอะไร?</p><div class="d-grid gap-2"><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="minimal">ไปคาเฟ่เงียบๆ อ่านหนังสือ</button><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="adventure">ไปเดินป่า ตั้งแคมป์</button><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="fashionista">ไปช้อปปิ้ง ดูงานศิลปะ</button></div></div><div id="style-quiz-step-2" class="d-none"><p class="fw-bold">2/3: ตู้เสื้อผ้าของคุณส่วนใหญ่เป็นสีอะไร?</p><div class="d-grid gap-2"><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="minimal">สีพื้นๆ ขาว ดำ เทา ครีม</button><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="adventure">สีเอิร์ธโทน เขียว น้ำตาล</button><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="fashionista">สีสันสดใส หรือ พาสเทล</button></div></div><div id="style-quiz-step-3" class="d-none"><p class="fw-bold">3/3: ถ้าเลือกเครื่องประดับได้ 1 ชิ้น คุณจะเลือกอะไร?</p><div class="d-grid gap-2"><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="minimal">นาฬิกาข้อมือเรียบๆ</button><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="adventure">หมวกแก๊ป หรือ เป้เท่ๆ</button><button class="btn btn-outline-dark style-quiz-answer-btn" data-value="fashionista">สร้อยคอ หรือ ต่างหูโดดเด่น</button></div></div></div></div></div></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, query, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- UI Elements ---
+        const loader = document.getElementById('loader');
+        const appSection = document.getElementById('app-section');
+        const logoutBtn = document.getElementById('logout-btn');
+        const datePicker = document.getElementById('date-picker');
+        const mainMenu = document.getElementById('main-menu-view');
+        const dailyColorView = document.getElementById('daily-color-view');
+        const backToMenuBtn = document.getElementById('back-to-menu-btn');
+        const historyCardsContainer = document.getElementById('history-cards-container');
+        const noDataMessage = document.getElementById('no-data-message');
+        const personalColorDesc = document.getElementById('personal-color-desc');
+
+        // --- Modals ---
+        const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+        const modalBodyText = document.getElementById('modal-body-text');
+        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        const profileSetupModal = new bootstrap.Modal(document.getElementById('profileSetupModal'));
+        const personalColorModal = new bootstrap.Modal(document.getElementById('personalColorModal'));
+        const styleQuizModal = new bootstrap.Modal(document.getElementById('styleQuizModal'));
+        
+        // --- Quiz State ---
+        let personalColorScores, currentPersonalColorQuizStep;
+        let styleScores, currentStyleQuizStep;
+
+        const appData = {
+            enhancementColors: {"การเงิน": [{ main: "สีทอง", secondary: "สีเหลือง" }, { main: "สีเงิน", secondary: "สีขาว" }],"การงาน": [{ main: "สีน้ำเงิน", secondary: "สีฟ้า" }, { main: "สีน้ำตาล", secondary: "สีเขียว" }],"ความรัก": [{ main: "สีชมพู", secondary: "สีแดง" }, { main: "สีพีช", secondary: "สีขาว" }],"สุขภาพ": [{ main: "สีเขียว", secondary: "สีครีม" }, { main: "สีฟ้าอ่อน", secondary: "สีขาว" }],"โชคลาภ": [{ main: "สีส้ม", secondary: "สีทอง" }, { main: "สีแดง", secondary: "สีเหลือง" }]},
+            quotes: ["การแต่งตัวคือวิธีแสดงตัวตนโดยไม่ต้องพูดอะไรเลย","แฟชั่นคือสิ่งที่คุณซื้อ สไตล์คือสิ่งที่คุณเป็นเจ้าของ","จงสง่างามและแตกต่าง","สไตล์คือลายเซ็นส่วนตัวของคุณ"],
+            personalColor: { warm: "คุณคือ Warm Tone (Spring/Autumn)!\n\nสีที่แนะนำ: สีโทนอุ่น เช่น ส้ม, เหลือง, ทอง, เขียวมะกอก, แดงอิฐ", cool: "คุณคือ Cool Tone (Summer/Winter)!\n\nสีที่แนะนำ: สีโทนเย็น เช่น น้ำเงิน, ฟ้า, ม่วง, ชมพู, เขียวอมฟ้า", neutral: "คุณคือ Neutral Tone!\n\nยินดีด้วย! คุณสามารถใส่เสื้อผ้าได้หลากหลายสีทั้งโทนร้อนและโทนเย็น" },
+            styles: { minimal: "คุณคือ 'เหมียวมินิมอล'!\nสไตล์ของคุณคือความเรียบง่าย แต่ดูดี เน้นเสื้อผ้าสีพื้นๆ อย่างขาว ดำ เทา ครีม และคัตติ้งเนี้ยบ", adventure: "คุณคือ 'เหมียวสายลุย'!\nคุณชอบความสบายและคล่องตัว สไตล์ของคุณคือเสื้อผ้าแนวเอิร์ธโทน กางเกงคาร์โก้ และรองเท้าบูท", fashionista: "คุณคือ 'เหมียวแฟชั่นนิสต้า'!\nคุณสนุกกับการแต่งตัวและไม่กลัวที่จะลองอะไรใหม่ๆ สไตล์ของคุณเต็มไปด้วยสีสันและไอเท็มที่ไม่เหมือนใคร" }
+        };
+
+        const showMessage = (message, title = "การแจ้งเตือน") => {
+            document.getElementById('messageModalLabel').innerText = title;
+            modalBodyText.innerText = message;
+            messageModal.show();
+        };
+        
+        const renderHistoryCards = (data) => {
+            historyCardsContainer.innerHTML = '';
+            if (data && data.length > 0) {
+                noDataMessage.classList.add('d-none');
+                data.forEach(item => {
+                    const cardCol = document.createElement('div');
+                    cardCol.className = 'col-md-6 col-lg-4';
+                    cardCol.innerHTML = `<div class="card history-card h-100"><div class="card-body"><h5 class="card-title fw-bold">${item.enhancement_type}</h5><h6 class="card-subtitle mb-2 text-muted">${item.selected_date}</h6><p class="card-text mb-1"><strong>สีหลัก:</strong> ${item.main_color}</p><p class="card-text"><strong>สีรอง:</strong> ${item.secondary_color}</p><button class="btn btn-sm btn-outline-danger delete-btn" data-id="${item.id}">ลบ</button></div></div>`;
+                    historyCardsContainer.appendChild(cardCol);
+                });
+                document.querySelectorAll('.delete-btn').forEach(button => { button.addEventListener('click', (e) => { confirmDeleteBtn.dataset.docId = e.target.dataset.id; confirmationModal.show(); }); });
+            } else {
+                noDataMessage.classList.remove('d-none');
+            }
+        };
+
+        const updateUIWithProfile = (profileData) => {
+            if (profileData?.personal_color) {
+                const toneText = profileData.personal_color.charAt(0).toUpperCase() + profileData.personal_color.slice(1);
+                personalColorDesc.innerHTML = `ผลของคุณ: <strong>${toneText} Tone</strong><br><small>(คลิกเพื่อทำแบบทดสอบอีกครั้ง)</small>`;
+            } else {
+                 personalColorDesc.innerText = "ค้นหา Personal Color ของคุณ";
+            }
+        };
+
+        const resetPersonalColorQuiz = () => {
+            personalColorScores = { warm: 0, cool: 0, neutral: 0 };
+            currentPersonalColorQuizStep = 1;
+            document.getElementById('quiz-step-1').classList.remove('d-none');
+            document.getElementById('quiz-step-2').classList.add('d-none');
+            document.getElementById('quiz-step-3').classList.add('d-none');
+        };
+        
+        const resetStyleQuiz = () => {
+            styleScores = { minimal: 0, adventure: 0, fashionista: 0 };
+            currentStyleQuizStep = 1;
+            document.getElementById('style-quiz-step-1').classList.remove('d-none');
+            document.getElementById('style-quiz-step-2').classList.add('d-none');
+            document.getElementById('style-quiz-step-3').classList.add('d-none');
+        };
+
+        async function main() {
+            const today = new Date();
+            datePicker.value = today.toISOString().split('T')[0];
+
+            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+            if (!firebaseConfig.apiKey) { loader.innerHTML = "Firebase configuration is missing."; return; }
+
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { await signInWithCustomToken(auth, __initial_auth_token); } else { await signInAnonymously(auth); }
+            } catch (error) { console.error("Authentication Error:", error); loader.innerHTML = "Authentication failed."; return; }
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const userId = user.uid;
+                    const profileDocRef = doc(db, 'artifacts', appId, 'users', userId, 'profile', 'user_info');
+                    const colorsCollectionRef = collection(db, 'artifacts', appId, 'users', userId, 'lucky_colors');
+
+                    const profileSnap = await getDoc(profileDocRef);
+                    if (!profileSnap.exists() || !profileSnap.data().gender || !profileSnap.data().dob) {
+                        loader.style.opacity = '0';
+                        setTimeout(() => loader.classList.add('d-none'), 500);
+                        profileSetupModal.show();
+                    } else {
+                        document.getElementById('welcome-message').innerText = `ยินดีต้อนรับ, คุณ ${profileSnap.data().gender === 'male' ? 'ชาย' : 'หญิง'}!`;
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.classList.add('d-none');
+                            appSection.classList.remove('d-none');
+                        }, 500);
+                    }
+
+                    document.getElementById('save-profile-btn').addEventListener('click', async () => {
+                        const gender = document.getElementById('gender-select').value;
+                        const dob = document.getElementById('dob-input').value;
+                        if (gender && dob) {
+                            try {
+                                await setDoc(profileDocRef, { gender, dob }, { merge: true });
+                                profileSetupModal.hide();
+                                loader.style.opacity = '0';
+                                setTimeout(() => {
+                                    loader.classList.add('d-none');
+                                    appSection.classList.remove('d-none');
+                                }, 500);
+                                document.getElementById('welcome-message').innerText = `ยินดีต้อนรับ, คุณ ${gender === 'male' ? 'ชาย' : 'หญิง'}!`;
+                            } catch (error) { showMessage("เกิดข้อผิดพลาดในการบันทึกข้อมูล: " + error.message); }
+                        } else { showMessage("กรุณากรอกข้อมูลให้ครบถ้วน"); }
+                    });
+
+                    onSnapshot(query(colorsCollectionRef), (snapshot) => {
+                        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        data.sort((a, b) => b.timestamp - a.timestamp);
+                        renderHistoryCards(data);
+                    });
+                    
+                    onSnapshot(profileDocRef, (doc) => { updateUIWithProfile(doc.data()); });
+
+                    document.querySelectorAll('.main-choice-card').forEach(card => {
+                        card.addEventListener('click', () => {
+                            const option = card.dataset.option;
+                            if(option === 'occasion'){ mainMenu.classList.add('d-none'); dailyColorView.classList.remove('d-none'); }
+                            if(option === 'personal-color'){ resetPersonalColorQuiz(); personalColorModal.show(); }
+                            if(option === 'style'){ resetStyleQuiz(); styleQuizModal.show(); }
+                            if(option === 'quote'){ const quote = appData.quotes[Math.floor(Math.random() * appData.quotes.length)]; showMessage(quote, "คำคมประจำวัน"); }
+                        });
+                    });
+                    
+                    backToMenuBtn.addEventListener('click', () => { dailyColorView.classList.add('d-none'); mainMenu.classList.remove('d-none'); });
+
+                    document.querySelectorAll('.enhancement-btn').forEach(button => {
+                        button.addEventListener('click', async (e) => {
+                            const type = e.target.dataset.enhancement;
+                            const date = new Date(datePicker.value).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+                            const colors = appData.enhancementColors[type][Math.floor(Math.random() * appData.enhancementColors[type].length)];
+                            const newData = { selected_date: date, enhancement_type: type, main_color: colors.main, secondary_color: colors.secondary, timestamp: Date.now() };
+                            try { await addDoc(colorsCollectionRef, newData); showMessage(`บันทึกสีมงคลสำหรับ '${type}' วันที่ ${date} เรียบร้อย!`); } catch (error) { showMessage("เกิดข้อผิดพลาดในการบันทึกข้อมูล: " + error.message); }
+                        });
+                    });
+
+                    document.querySelectorAll('.personal-color-quiz-btn').forEach(button => {
+                        button.addEventListener('click', async (e) => {
+                            personalColorScores[e.target.dataset.value]++;
+                            document.getElementById(`quiz-step-${currentPersonalColorQuizStep}`).classList.add('d-none');
+                            currentPersonalColorQuizStep++;
+                            if (currentPersonalColorQuizStep > 3) {
+                                personalColorModal.hide();
+                                let result = 'neutral';
+                                if (personalColorScores.warm > personalColorScores.cool) result = 'warm';
+                                if (personalColorScores.cool > personalColorScores.warm) result = 'cool';
+                                try { await setDoc(profileDocRef, { personal_color: result }, { merge: true }); showMessage(appData.personalColor[result], 'ยินดีด้วย! Personal Color ของคุณคือ'); } catch (error) { showMessage("เกิดข้อผิดพลาดในการบันทึกข้อมูล: " + error.message); }
+                            } else { document.getElementById(`quiz-step-${currentPersonalColorQuizStep}`).classList.remove('d-none'); }
+                        });
+                    });
+                     document.querySelectorAll('.style-quiz-answer-btn').forEach(button => {
+                        button.addEventListener('click', e => {
+                            styleScores[e.target.dataset.value]++;
+                            document.getElementById(`style-quiz-step-${currentStyleQuizStep}`).classList.add('d-none');
+                            currentStyleQuizStep++;
+                            if (currentStyleQuizStep > 3) {
+                                styleQuizModal.hide();
+                                let result = 'minimal';
+                                if (styleScores.adventure > styleScores.minimal && styleScores.adventure > styleScores.fashionista) result = 'adventure';
+                                if (styleScores.fashionista > styleScores.minimal && styleScores.fashionista > styleScores.adventure) result = 'fashionista';
+                                showMessage(appData.styles[result], "สไตล์ของคุณคือ...");
+                            } else { document.getElementById(`style-quiz-step-${currentStyleQuizStep}`).classList.remove('d-none'); }
+                        });
+                    });
+
+                    confirmDeleteBtn.addEventListener('click', async (e) => {
+                        const docId = e.target.dataset.docId;
+                         if (docId) {
+                            const docRef = doc(db, 'artifacts', appId, 'users', userId, 'lucky_colors', docId);
+                            try { await deleteDoc(docRef); confirmationModal.hide(); showMessage("ลบข้อมูลสำเร็จ!"); } catch (error) { showMessage("เกิดข้อผิดพลาดในการลบข้อมูล: " + error.message); }
+                        }
+                    });
+                } else {
+                    loader.classList.remove('d-none');
+                    loader.innerHTML = "You have been logged out. Please refresh.";
+                    appSection.classList.add('d-none');
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => { signOut(auth).catch(error => showMessage("เกิดข้อผิดพลาดในการออกจากระบบ: " + error.message)); });
+        }
+        main();
+    </script>
+</body>
+</html>
+
